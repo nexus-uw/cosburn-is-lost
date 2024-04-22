@@ -7,8 +7,11 @@ import { createServer } from 'node:http'
 
 const hostname = '0.0.0.0'
 const port = 3000
+
+const proxy = process.env.PROXY || 'socks5h://127.0.0.1:9150'
+
 const agent = new SocksProxyAgent(
-	'socks5h://127.0.0.1:9150',
+	proxy,
 
 )
 const server = createServer((req, res) => {
