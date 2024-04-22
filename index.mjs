@@ -19,10 +19,10 @@ const server = createServer((req, res) => {
 	console.log(req.headers, req.url)
 
 
-	const url = new URL(req.url, `http://${request.headers.host}`)
+	const url = new URL(req.url, `http://${req.headers.host}`)
 	console.log(url)
 	if (url.hostname.includes('.onion'))
-		http.get(`http://${url.hostname.split('.onion')[0]}.onion/${url.pathname}?${url.search}`, {
+		http.get(`http://${url.hostname.split('.onion')[0]}.onion${url.pathname}?${url.search}`, {
 			agent,
 			headers: {
 				'user-agent': 'some big old titites v0.2',
