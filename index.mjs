@@ -16,10 +16,11 @@ const agent = new SocksProxyAgent(
 )
 const server = createServer((req, res) => {
 
-	console.log(req.headers.location)
+	console.log(req.headers, req.url)
 
 
-	const url = new URL(req.url)
+	const url = new URL(req.url, `http://${request.headers.host}`)
+	console.log(url)
 	if (url.hostname.includes('.onion'))
 		http.get(`http://${url.hostname.split('.onion')[0]}.onion/${url.pathname}?${url.search}`, {
 			agent,
