@@ -31,7 +31,7 @@ const server = createServer((req, res) => {
 			agent,
 			headers
 		}, (res2) => {
-			console.log('response',res2.headers, res2.statusCode. res2.headers['set-cookie'],res2.headers.cookie)
+			console.log('response',res2.headers, res2.statusCode) //res2.headers?['set-cookie'],res2.headers.cookie)
 			res.statusCode = res2.statusCode
 			for(const k in res2.headers){
 				res.setHeader(k, res2.headers[k])
