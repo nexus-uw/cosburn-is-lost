@@ -21,9 +21,11 @@ const server = createServer((req, res) => {
 
 	const url = new URL(req.url, `http://${req.headers.host}`)
 	console.log(url)
-	if (url.hostname.includes('.onion'))
-		http.get(`http://${url.hostname.split('.onion')[0]}.onion${url.pathname}?${url.search}`, {
+	//if (url.hostname.includes('.onion'))
+		const proxyReq = http.request(`http://${url.hostname.split('.onion')[0]}.onion${url.pathname}?${url.search}`, {
+			method: req.method,
 			agent,
+			
 			headers: {
 				'user-agent': 'some big old titites v0.2',
 				...req.headers
@@ -36,6 +38,17 @@ const server = createServer((req, res) => {
 			}
 			res2.pipe(res)
 		})
+
+		// assert that post/put only
+    req.on('data', chunk => {
+		proxyReq.write(chunk)
+    });
+    req.on('end', () => {
+        proxyReq.end()
+        
+    });
+		
+		
 })
 
 server.listen(port, hostname, () => {
