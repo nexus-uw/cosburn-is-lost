@@ -29,9 +29,11 @@ const server = createServer((req, res) => {
 				...req.headers
 			}
 		}, (res2) => {
-
-			console.log(res2)
-			console.log(res2.headers)
+			console.log(res2.headers, res2.statusCode)
+			res.statusCode(res2.statusCode)
+			for(const k in res2.headers){
+				res.setHeader(k, res2.headers[k])
+			}
 			res2.pipe(res)
 		})
 })
