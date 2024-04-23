@@ -20,18 +20,18 @@ const server = createServer((req, res) => {
 
 
 	const url = new URL(req.url, `http://${req.headers.host}`)
-	console.log(url)
-	//if (url.hostname.includes('.onion'))
+	const headers =  {
+		'user-agent': 'some big old titites v0.2',
+		...req.headers
+	}
+	console.log('request',url,req.headers,req.headers.cookie, '->',headers)
+	//if (url.hostname.includes('.onion')) todo - filter
 		const proxyReq = http.request(`http://${url.hostname.split('.onion')[0]}.onion${url.pathname}?${url.search}`, {
 			method: req.method,
 			agent,
-			
-			headers: {
-				'user-agent': 'some big old titites v0.2',
-				...req.headers
-			}
+			headers
 		}, (res2) => {
-			console.log(res2.headers, res2.statusCode)
+			console.log('response',res2.headers, res2.statusCode. res2.headers['set-cookie'],res2.headers.cookie)
 			res.statusCode = res2.statusCode
 			for(const k in res2.headers){
 				res.setHeader(k, res2.headers[k])
