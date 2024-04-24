@@ -20,18 +20,22 @@ const server = createServer((req, res) => {
 
 
 	const url = new URL(req.url, `http://${req.headers.host}`)
+	// block root cookies? 
+	const host = `${url.hostname.split('.onion')[0]}.onion`
 	const headers =  {
 		'user-agent': 'some big old titites v0.2',
-		...req.headers
+		...req.headers,
+		host // pretend to be og onion site
 	}
-	console.log('request',url,req.headers,req.headers.cookie, '->',headers)
+	console.log('request',req.method, url,req.headers,req.rawHeaders, '->',headers)
 	//if (url.hostname.includes('.onion')) todo - filter
-		const proxyReq = http.request(`http://${url.hostname.split('.onion')[0]}.onion${url.pathname}?${url.search}`, {
+		const proxyReq = http.request(`http://${host}${url.pathname}?${url.search}`, {
 			method: req.method,
 			agent,
 			headers
 		}, (res2) => {
-			console.log('response',res2.headers, res2.statusCode) //res2.headers?['set-cookie'],res2.headers.cookie)
+			console.log('response',res2.statusCode, res2.headers, res2.rawHeaders) //res2.headers?['set-cookie'],res2.headers.cookie)
+			// if cookies, re-write site to be proxy's?
 			res.statusCode = res2.statusCode
 			for(const k in res2.headers){
 				res.setHeader(k, res2.headers[k])
@@ -41,9 +45,11 @@ const server = createServer((req, res) => {
 
 		// assert that post/put only
     req.on('data', chunk => {
-		proxyReq.write(chunk)
+		console.log('data')
+		proxyReq.write(chunk, (err)=>console.error('data forward err '+err))
     });
     req.on('end', () => {
+		console.log('end')
         proxyReq.end()
         
     });
