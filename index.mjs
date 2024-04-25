@@ -27,9 +27,10 @@ const server = createServer((req, res) => {
 		...req.headers,
 		host // pretend to be og onion site
 	}
-	console.log('request',req.method, url,req.headers,req.rawHeaders, '->',headers)
+	const target = `http://${host}${url.pathname}${url.search}`
+	console.log('request',req.method, target , headers)
 	//if (url.hostname.includes('.onion')) todo - filter
-		const proxyReq = http.request(`http://${host}${url.pathname}?${url.search}`, {
+		const proxyReq = http.request(target, {
 			method: req.method,
 			agent,
 			headers
