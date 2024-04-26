@@ -4,81 +4,77 @@ import http from 'http'
 import { SocksProxyAgent } from 'socks-proxy-agent'
 
 import { createServer } from 'node:http'
+import { createCipheriv } from 'crypto'
 
 const hostname = '0.0.0.0'
 const port = 3000
-
+const root = process.env.ROOT_NAME
 const proxy = process.env.PROXY || 'socks5h://127.0.0.1:9150'
 
 const agent = new SocksProxyAgent(
 	proxy,
-
 )
+
+async function allowedDomain(domain) {
+	// todo: put this in a DB
+	return (process.env.WHITELIST || '').split(';').includes(domain)
+}
+
 const server = createServer((req, res) => {
 
-	console.log(req.headers, req.url)
-
-
 	const url = new URL(req.url, `http://${req.headers.host}`)
-	// block root cookies? 
+	// block root cookies? 6
 	const host = `${url.hostname.split('.onion')[0]}.onion`
-	const headers =  {
+	if (!allowedDomain(host)) {
+		res.statusCode = 400
+		res.write(`${host} is not whitelisted`)
+		res.end()
+	}
+	const headers = {
 		'user-agent': 'some big old titites v0.2',
 		...req.headers,
-		host // pretend to be og onion site
+		//host // pretend to be og onion site
+		// todo: filter out some headers?
 	}
-	const target = `http://${host}${url.pathname}${url.search}`
-	console.log('request',req.method, target , headers)
-	//if (url.hostname.includes('.onion')) todo - filter
-		const proxyReq = http.request(target, {
-			method: req.method,
-			agent,
-			headers
-		}, (res2) => {
-			console.log('response',res2.statusCode, res2.headers, res2.rawHeaders) //res2.headers?['set-cookie'],res2.headers.cookie)
-			// if cookies, re-write site to be proxy's?
-			res.statusCode = res2.statusCode
-			for(const k in res2.headers){
-				res.setHeader(k, res2.headers[k])
-			}
-			res2.pipe(res)
-		})
 
-		// assert that post/put only
-    req.on('data', chunk => {
+delete headers['x-forwarded-for']
+delete headers['x-forwarded-host']
+delete headers['x-forwarded-proto']
+	const target = `http://${host}${url.pathname}${url.search}${url.hash}`
+console.debug(req.method,target, headers)
+	try{
+	const proxyReq = http.request(target, {
+		method: req.method,
+		agent,
+		headers
+	}, (res2) => {
+		console.log('response', res2.statusCode, res2.headers) //res2.headers?['set-cookie'],res2.headers.cookie)
+		// if cookies, re-write site to be proxy's?
+		res.statusCode = res2.statusCode
+		for (const k in res2.headers) {
+			res.setHeader(k, res2.headers[k])
+		}
+		res2.pipe(res)
+	})
+
+	// assert that post/put only
+	req.on('data', chunk => {
 		console.log('data')
-		proxyReq.write(chunk, (err)=>console.error('data forward err '+err))
-    });
-    req.on('end', () => {
-		console.log('end')
-        proxyReq.end()
-        
-    });
-		
-		
+		proxyReq.write(chunk, (err) => console.error('data forward err ' + err))
+	});
+	req.on('end', () => {
+		proxyReq.end()
+	});
+	}catch(e){
+		console.error(e)
+		res.statusCode = 500
+		res.write(`proxy req failed`)
+		res.end()
+	}
+
+
 })
 
 server.listen(port, hostname, () => {
 	console.log(`Server running at http://${hostname}:${port}/`)
 })
-
-
-// import CacheableLookup from 'cacheable-lookup'
-
-// const cacheableLookup = new CacheableLookup()
-// cacheableLookup.servers = ['127.0.0.1:8853']
-// cacheableLookup.servers = ['127.0.0.1:9999']
-
-
-
-
-
-// import request from 'request'
-// import Agent from 'socks5-http-client/lib/Agent'
-
-// request.get('http://qxkp5h447ik6kuxqjkjtqwcgurnaeyqldnyx5kaqvpvcfdmlldakyyad.onion', {
-// 	agentClass: Agent, agentOptions: {
-// 		socksHost: '127.0.0.1',
-// 		socksPort: 9150
-// 	}
-// })

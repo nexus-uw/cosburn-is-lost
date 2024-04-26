@@ -1,0 +1,9 @@
+- remove logging
+- cleanly handle failures
+- whitelist of onions w/o code deployment (docker secret? db?)
+- infra setup w/ tor process
+- round robin proxy server
+- deploy hi-avail to cloud (?)
+- anon (ish) metrics
+ - log onion + response code + time
+ health check
