@@ -22,13 +22,22 @@ async function allowedDomain(domain) {
 
 const server = createServer((req, res) => {
 
+	if(req.headers.host === root){
+		res.statusCode = 200
+		res.write(`TODO - build out landing page with contact info. something better than just a string`)
+		res.end()
+		return
+	}
+
 	const url = new URL(req.url, `http://${req.headers.host}`)
 	// block root cookies? 6
 	const host = `${url.hostname.split('.onion')[0]}.onion`
+	console.debug(host)
 	if (!allowedDomain(host)) {
 		res.statusCode = 400
 		res.write(`${host} is not whitelisted`)
 		res.end()
+		return
 	}
 	const headers = {
 		'user-agent': 'some big old titites v0.2',
