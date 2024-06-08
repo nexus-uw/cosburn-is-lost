@@ -1,0 +1,35 @@
+services:
+  tor:
+    image: goldy/tor-hidden-service
+    restart: always
+    environment:
+      GOTO_TOR_SERVICE_HOSTS: '80:goto:8080'
+      TOR_SOCKS_PORT: 9091
+      # speed up hidden service access for decreased security
+      TOR_EXTRA_OPTIONS: 
+        #HiddenServiceNonAnonymousMode 1
+       #HiddenServiceSingleHopMode 1
+    secrets:
+      - goto
+
+  goto:
+    image: superseriousbusiness/gotosocial:latest
+    security_opt:
+      - apparmor=gotosocial
+    environment:
+      GTS_HOST: sampleg325ps7z3d6oqadfgmokwvuic72lgr3b4um22ekgf3jq6ebaad.onion.monster
+      GTS_DB_TYPE: sqlite
+      GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
+      GTS_LETSENCRYPT_ENABLED: "false"
+      GTS_TRUSTED_PROXIES: "172.x.x.x" # important - change to tor container's docker IP
+      HTTP_PROXY: "socks5://tor:9091"
+    volumes:
+      - gotosocial:/gotosocial/storage
+    restart: "always"
+
+volumes:
+  gotosocial: 
+
+secrets:
+  goto:
+    file: ./hs_ed25519_secret_key_goto
