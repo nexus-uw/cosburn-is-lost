@@ -129,3 +129,12 @@ console.debug(req.method,target)
 server.listen(port, hostname, () => {
 	console.log(`Server running at http://${hostname}:${port}/`)
 })
+
+server.on('clientError', (err, socket) => {
+	console.log('clientError',err)
+  if (err.code === 'ECONNRESET' || !socket.writable) {
+    return;
+  }
+
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+}); 
