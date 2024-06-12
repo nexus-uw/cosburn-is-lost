@@ -1,9 +1,10 @@
 - remove logging
 - cleanly handle failures
 - whitelist of onions w/o code deployment (docker secret? db?)
-- infra setup w/ tor process
+- infra setup w/ tor process DONE
 - round robin proxy server
 - deploy hi-avail to cloud (?)
 - anon (ish) metrics
  - log onion + response code + time
  health check
+wss support (ie: wss://sampleg325ps7z3d6oqadfgmokwvuic72lgr3b4um22ekgf3jq6ebaad.onion.monster/api/v1/streaming)
