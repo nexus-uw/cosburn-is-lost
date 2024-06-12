@@ -14,7 +14,7 @@ const proxy = process.env.PROXY || 'socks5h://127.0.0.1:9150'
 const agent = new SocksProxyAgent(
 	proxy,
 	  {
-	    timeout: 1500
+	    timeout: 15000
 	  }
 )
 
@@ -109,6 +109,12 @@ console.debug(req.method,target)
 		});
 		req.on('end', () => {
 			proxyReq.end()
+		});
+		req.on('error', (error) => {
+			console.error(e)
+			res.statusCode = 500
+			res.write(`proxy req failed`)
+			res.end()
 		});
 	}catch(e){
 		console.error(e)
