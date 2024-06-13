@@ -49,13 +49,14 @@ const server = createServer((req, res) => {
   
   <h2> DISCALIMER </h2>
   <p> There are some inherit security flaws with this setup. I need to properly document them. So, for now this is just a fun test thing.</p>
-
+  <p> this is also a slow way to do things (it is communiticating with a hidden service over 6 nodes, and if the fedi server needs to make its own call out, it will have to make 3 more tor node hops). Due to inherit design of onion routing, th</p>
   <h3> Links </h3>
    <ul>
     <li><a href="https://github.com/nexus-uw/cosburn-is-lost/tree/master">CODE</a></li>
     <li><a href="https://github.com/nexus-uw/cosburn-is-lost/tree/master/sample">Sample gotosocial server setup using dockercompose</a></li>
     <li><a href="https://sampleg325ps7z3d6oqadfgmokwvuic72lgr3b4um22ekgf3jq6ebaad.onion.monster">test server 1</a></li>
     <li><a href="https://lfom7wkestbnygwr6ae22loll363pv3eb5nrwraf3cc6fdlrw55kerqd.onion.monster">test server 2</a></li>
+    <li><a href="https://mastodon.social/@onion_monster/112607557795698912"> sample thread between the 2 test servers and a normal Mastadon account, showing that they are all able to federate amongst themselves</a> </li>
     <li><a href="https://elk.onion.monster">elk client configured to work with onion.monster servers</a></li>
   </ul> 
   <footer>
