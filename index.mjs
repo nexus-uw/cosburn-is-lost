@@ -90,11 +90,13 @@ delete headers['x-forwarded-host']
 delete headers['x-forwarded-proto']
 	const target = `http://${host}${url.pathname}${url.search}${url.hash}`
 console.debug(req.method,target)
+	
 	try{
 		const proxyReq = http.request(target, {
 			method: req.method,
 			agent,
-			headers
+			headers,
+			timeout: 14000 //ms - less than proxy timeout
 		}, (res2) => {
 			console.debug('response', res2.statusCode/*, res2.headers todo - strip important values before logging*/) //res2.headers?['set-cookie'],res2.headers.cookie)
 			res.statusCode = res2.statusCode
@@ -102,6 +104,13 @@ console.debug(req.method,target)
 				res.setHeader(k, res2.headers[k])
 			}
 			res2.pipe(res)
+		})
+
+		proxyReq.on('error', e => {
+			console.error(e)
+			res.statusCode = 500
+			res.write(`proxy req failed`)
+			res.end()
 		})
 	
 		// assert that post/put only
