@@ -24,8 +24,7 @@ async function allowedDomain(domain) {
 }
 
 const server = createServer((req, res) => {
-
-	if (req.headers.host === root || req.headers.host === "localhost") {
+	if (req.headers.host === root || req.headers.host === `localhost:${port}`) {
 		handleRootRequest(agent, req, res)
 	} else {
 

@@ -1,12 +1,14 @@
+import http from 'http'
+
 /**
  * 
  * @param {http.IncomingMessage} req 
- * @param {Response} res 
+ * @param {http.OutgoingMessage} res 
  * @returns 
  */
 export function handleRootRequest(agent, req, res) {
-
-    if (req.path === "/health") {
+    console.log(req.url)
+    if (req.url === "/health") {
         // assert than tor client is up and running. q: should this be hidden service or clearnet site? hidden service is more likely to be down due to larger number of moving pieces 
         // todo - make this configurable
         const proxyReq = http.request("http://ramsayswljlwqo7yvw3ovxhyzavllyduxkgh4rbobzkc263jyro6cjyd.onion/ping", {
