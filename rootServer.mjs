@@ -7,12 +7,15 @@ import http from 'http'
  * @returns 
  */
 export function handleRootRequest(agent, req, res) {
-    console.log(req.url)
+    
     if (req.url === "/health") {
         // assert than tor client is up and running. q: should this be hidden service or clearnet site? hidden service is more likely to be down due to larger number of moving pieces 
         // todo - make this configurable
         const proxyReq = http.request("http://ramsayswljlwqo7yvw3ovxhyzavllyduxkgh4rbobzkc263jyro6cjyd.onion/ping", {
             method: 'GET',
+			headers:{
+				'user-agent':'onion.monster/1.0 health check'
+			},
             agent,
             timeout: 29000 //ms - less than proxy timeout
         }, (res2) => {
