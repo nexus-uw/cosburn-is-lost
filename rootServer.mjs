@@ -20,12 +20,12 @@ export function handleRootRequest(agent, req, res) {
             timeout: 29000 //ms - less than proxy timeout
         }, (res2) => {
             console.debug('health check response', res2.statusCode)
-            res.statusCode = res2.statusCode
-            res2.pipe(res)
+            res.statusCode = res2.stausCode
+            res.end()
         })
 
         proxyReq.on('error', e => {
-            console.error(e)
+            console.error('healthCheckError',e)
             res.statusCode = 500
             res.write(`health check req failed`)
             res.end()
