@@ -31,8 +31,9 @@ const server = createServer((req, res) => {
 		const url = new URL(req.url, `http://${req.headers.host}`)
 		// todo - block root cookies? https://aszx87410.github.io/beyond-xss/en/ch4/cookie-bomb/
 		const host = `${url.hostname.split('.onion')[0]}.onion`
-		console.debug(host)
+		
 		if (!allowedDomain(host)) {
+			console.log(`400 - NOT WHITELISTED ${host}`)
 			res.statusCode = 400
 			res.write(`${host} is not whitelisted`)
 			res.end()
@@ -49,8 +50,8 @@ const server = createServer((req, res) => {
 		delete headers['x-forwarded-host']
 		delete headers['x-forwarded-proto']
 		const target = `http://${host}${url.pathname}${url.search}${url.hash}`
-		console.debug(req.method, target)
-
+		
+		const start = Date.now
 		try {
 			const proxyReq = http.request(target, {
 				method: req.method,
@@ -58,7 +59,8 @@ const server = createServer((req, res) => {
 				headers,
 				timeout: 29000 //ms - less than proxy timeout
 			}, (res2) => {
-				console.debug('response', res2.statusCode/*, res2.headers todo - strip important values before logging*/) //res2.headers?['set-cookie'],res2.headers.cookie)
+				const end = Date.now
+				console.debug(`${res2.statusCode} - ${req.method} ${end-start} ${target}`) //res2.headers?['set-cookie'],res2.headers.cookie) // todo - would be great to pull out any caching related headers
 				res.statusCode = res2.statusCode
 				for (const k in res2.headers) {
 					res.setHeader(k, res2.headers[k])
@@ -67,7 +69,9 @@ const server = createServer((req, res) => {
 			})
 
 			proxyReq.on('error', e => {
+				const end = Date.now
 				console.error(e)
+				console.debug(`500 - ProxyFailure ${req.method} ${end-start} ${target}`)
 				res.statusCode = 500
 				res.write(`proxy req failed`)
 				res.end()
@@ -81,13 +85,17 @@ const server = createServer((req, res) => {
 				proxyReq.end()
 			});
 			req.on('error', (error) => {
-				console.error(e)
+				console.error(error)
+				const end = Date.now
+				console.debug(`500 - RequestFailure ${req.method} ${end-start} ${target}`)
 				res.statusCode = 500
 				res.write(`proxy req failed`)
 				res.end()
 			});
 		} catch (e) {
 			console.error(e)
+			const end = Date.now
+			console.debug(`500 - GeneralFailure ${req.method} ${end-start} ${target}`)
 			res.statusCode = 500
 			res.write(`proxy req failed`)
 			res.end()

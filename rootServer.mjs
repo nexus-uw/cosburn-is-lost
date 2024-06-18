@@ -62,7 +62,7 @@ export function handleRootRequest(agent, req, res) {
 		<li><a href="https://elk.onion.monster">elk client configured to work with onion.monster servers</a></li>
 	  </ul> 
 	  <footer>
-		2024 - CURRENT YEAR TODO license
+		2024 - CURRENT YEAR <a href="unlicense.org">UNLICENSE</a>
 	  </footer>
 	  </body>
 	  </html>`)
