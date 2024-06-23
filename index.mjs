@@ -41,6 +41,7 @@ const server = createServer((req, res) => {
 		}
 		const headers = {
 			'user-agent': 'onion.monster/0.1',
+			'x-tor2web':'1', // https://github.com/tor2web/Tor2web/issues/164
 			...req.headers,
 			//host // pretend to be og onion site
 			// todo: filter out some headers?
