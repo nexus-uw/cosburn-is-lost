@@ -50,7 +50,7 @@ export function handleRootRequest(agent, req, res) {
 	  It operates as whitelisted tor2web style proxy, so that fedi servers can register with it and be accessible to the clear net as https://<onionV3>.onion.monster
 	  </p>
 	  <h2> would you like to host a server on onion.monster</h2>
-	  <p> TODO - contact </p>
+	  <p>  email admin @ this domain </p>
 	  
 	  <h2> DISCALIMER </h2>
 	  <p> There are some inherit security flaws with this setup. I need to properly document them. So, for now this is just a fun test thing.</p>
@@ -58,6 +58,8 @@ export function handleRootRequest(agent, req, res) {
 	  <h3> Links </h3>
 	   <ul>
 		<li><a href="https://github.com/nexus-uw/cosburn-is-lost/tree/master">CODE</a></li>
+		<li><a href="https://ramsay.xyz/2024/06/22/onion.monster.html">a very poor blog post attempting to describe this thing</a></li>
+  			
 		<li><a href="https://github.com/nexus-uw/cosburn-is-lost/tree/master/sample">Sample gotosocial server setup using dockercompose</a></li>
 		<li><a href="https://sampleg325ps7z3d6oqadfgmokwvuic72lgr3b4um22ekgf3jq6ebaad.onion.monster">test server 1</a></li>
 		<li><a href="https://lfom7wkestbnygwr6ae22loll363pv3eb5nrwraf3cc6fdlrw55kerqd.onion.monster">test server 2</a></li>
