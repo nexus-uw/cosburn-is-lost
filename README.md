@@ -1,7 +1,6 @@
 doc'd at https://onion.monster
 
-todo: better readme
-
+an attempt at an explaination of what this is: https://ramsay.xyz/2024/06/22/onion.monster.html
 
 ## how to run using Docker Compose
 
