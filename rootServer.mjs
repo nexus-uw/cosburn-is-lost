@@ -45,16 +45,13 @@ export function handleRootRequest(agent, req, res) {
 	  <h1>hello there</h1>
 	  <p>you have come across my INPROGRESS project </p>
 	  <p> What is this thing? onion.monster is a service that exposes tor hidden service fediverse servers to the broader fediverse so that they can properly federate. </p>
-	  <p> Why would you want to do such a thing? clearnet servers do not know how to connect to .onion domains (since those requests need to go through tor. While it would be possible for servers to configure their own tor proxy, I would not expect most servers to take on this work. 
-	  Additionally, from my expriences, servers have a HARD requirement to communicate over HTTPS. <a href="https://community.torproject.org/onion-services/advanced/https/">Hidden services can be servered over HTTPS, it not practical in 2024</a>. This is where onion.monster comes in.
-	  It operates as whitelisted tor2web style proxy, so that fedi servers can register with it and be accessible to the clear net as https://<onionV3>.onion.monster
+	  <p> I have attempted to further document + explain it <a href="https://ramsay.xyz/2024/06/22/onion.monster.html">on my blog</a> </p>
 	  </p>
 	  <h2> would you like to host a server on onion.monster</h2>
 	  <p>  email admin @ this domain </p>
 	  
 	  <h2> DISCALIMER </h2>
-	  <p> There are some inherit security flaws with this setup. I need to properly document them. So, for now this is just a fun test thing.</p>
-	  <p> this is also a slow way to do things (it is communiticating with a hidden service over 6 nodes, and if the fedi server needs to make its own call out, it will have to make 3 more tor node hops). Due to inherit design of onion routing, th</p>
+	  <p> TODO </p>
 	  <h3> Links </h3>
 	   <ul>
 		<li><a href="https://github.com/nexus-uw/cosburn-is-lost/tree/master">CODE</a></li>
@@ -65,6 +62,7 @@ export function handleRootRequest(agent, req, res) {
 		<li><a href="https://lfom7wkestbnygwr6ae22loll363pv3eb5nrwraf3cc6fdlrw55kerqd.onion.monster">test server 2</a></li>
 		<li><a href="https://mastodon.social/@onion_monster/112607557795698912"> sample thread between the 2 test servers and a normal Mastadon account, showing that they are all able to federate amongst themselves</a> </li>
 		<li><a href="https://elk.onion.monster">elk client configured to work with onion.monster servers</a></li>
+  		
 	  </ul> 
 	  <footer>
 		2024 - CURRENT YEAR <a href="unlicense.org">UNLICENSE</a>
